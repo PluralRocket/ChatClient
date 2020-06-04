@@ -51,6 +51,7 @@ public class Client {
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
         new ServerConnection(socket, getName());
+        System.out.println("Created ServerConnection.");
 
         while (true) {
             request = keyboard.readLine();

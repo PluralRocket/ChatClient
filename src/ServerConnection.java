@@ -21,10 +21,7 @@ public class ServerConnection extends Thread {
             String serverResponse=null;
             while(true){
             serverResponse = in.readLine();
-            if(serverResponse.startsWith(clientName))
-            { } else{
             System.out.println(serverResponse);
-            }
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -22,18 +22,12 @@ public class ClientHandler extends Thread{
     @Override
     public void run() {
 
-        try {
-            this.name=(in.readLine());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         try{
             while (true){
                 String request = in.readLine();
                 if(request == null) break;
-                for (ClientHandler c : ChatServer.clients) {
-                    c.out.println(name+":"+request);
+                for (ClientHandler c : ChatServerHandler.clients) {
+                    c.out.println(request);
                 }
             }
         } catch (Exception e) {
