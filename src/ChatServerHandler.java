@@ -8,7 +8,7 @@ public class ChatServerHandler extends Thread{
     int globalport;
     public static ArrayList<ClientHandler> clients = new ArrayList<>();
 
-    public ChatServerHandler (int port) throws IOException {
+    public ChatServerHandler (int port) {
         globalport = port;
         start();
     }
@@ -16,6 +16,7 @@ public class ChatServerHandler extends Thread{
     @Override
     public void run() {
         try {
+            System.out.println("[SERVER] Before...");
             ServerSocket ss = new ServerSocket(globalport);
             System.out.println("[SERVER] Listening...");
 
@@ -32,6 +33,7 @@ public class ChatServerHandler extends Thread{
             }*/
             }
         } catch (IOException e) {
+            System.out.println("catched");
 
         }
     }

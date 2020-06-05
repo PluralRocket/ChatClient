@@ -27,6 +27,7 @@ public class ClientHandler extends Thread{
                 String request = in.readLine();
                 if(request == null) break;
                 for (ClientHandler c : ChatServerHandler.clients) {
+                    System.out.println(c.toString());
                     c.out.println(request);
                 }
             }
