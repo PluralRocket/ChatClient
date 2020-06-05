@@ -33,8 +33,6 @@ public class Client {
         BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));
         String request;
 
-        System.out.print("Enter your name: ");
-        setName(keyboard.readLine());
 //        out.println(getName());
 
         System.out.print("Enter port: ");
@@ -51,6 +49,10 @@ public class Client {
 
         new ServerConnection(socket, getName());
         System.out.println("Created ServerConnection.");
+
+        System.out.print("Enter your name: ");
+        setName(keyboard.readLine());
+        out.println(getName());
 
         while (true) {
             request = keyboard.readLine();

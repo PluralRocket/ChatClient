@@ -3,7 +3,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
 
 public class ClientHandler extends Thread{
 
@@ -21,15 +20,22 @@ public class ClientHandler extends Thread{
 
     @Override
     public void run() {
-
         try{
+                name = in.readLine();
             while (true){
                 String request = in.readLine();
-                if(request == null) break;
-                for (ClientHandler c : ChatServerHandler.clients) {
-                    System.out.println(c.toString());
-                    c.out.println(request);
+                if(request == null) {
+                    ChatServerHandler.clients.remove(this);
                 }
+                if(request.equals("who")){
+                    for (ClientHandler c : ChatServerHandler.clients) {
+                        out.println(c.name);
+                    }
+                } else{
+                for (ClientHandler c : ChatServerHandler.clients) {
+                    c.out.println(this.name + ": " + request);
+                }
+            }
             }
         } catch (Exception e) {
             out.close();

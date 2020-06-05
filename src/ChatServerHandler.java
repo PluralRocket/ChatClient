@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -13,8 +14,16 @@ public class ChatServerHandler extends Thread{
         start();
     }
 
+//    public static void printMembers(){
+//
+//        for (ClientHandler c : clients) {
+//            System.out.println(c.toString());
+//        }
+//    }
+
     @Override
     public void run() {
+
         try {
             System.out.println("[SERVER] Before...");
             ServerSocket ss = new ServerSocket(globalport);
@@ -25,6 +34,8 @@ public class ChatServerHandler extends Thread{
                 Socket client = ss.accept();
                 System.out.println("[SERVER] Connected to client.");
 
+                PrintWriter out = new PrintWriter(client.getOutputStream(), true);
+
                 ClientHandler clientThread = new ClientHandler(client);
                 clients.add(clientThread);
 
@@ -33,7 +44,6 @@ public class ChatServerHandler extends Thread{
             }*/
             }
         } catch (IOException e) {
-            System.out.println("catched");
 
         }
     }

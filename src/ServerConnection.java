@@ -23,8 +23,8 @@ public class ServerConnection extends Thread {
             serverResponse = in.readLine();
             System.out.println(serverResponse);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("Caught");
         } finally {
             try {
                 in.close();
