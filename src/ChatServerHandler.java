@@ -8,6 +8,7 @@ public class ChatServerHandler extends Thread{
 
     int globalport;
     public static ArrayList<ClientHandler> clients = new ArrayList<>();
+    public static ArrayList<ClientHandler> room1 = new ArrayList<>();
 
     public ChatServerHandler (int port) {
         globalport = port;
@@ -38,6 +39,7 @@ public class ChatServerHandler extends Thread{
 
                 ClientHandler clientThread = new ClientHandler(client);
                 clients.add(clientThread);
+                clientThread.update();
 
            /*for (ClientHandler c : clients) {
                 System.out.println(c.toString());
