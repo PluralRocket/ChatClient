@@ -13,6 +13,7 @@ public class ClientHandler extends Thread{
     private PrintWriter out;
     private String name;
     private ArrayList<ClientHandler> currentRoom = new ArrayList<>();
+    private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
 
     public ClientHandler(Socket socket) throws IOException {
         this.client = socket;
@@ -32,7 +33,6 @@ public class ClientHandler extends Thread{
                 name = in.readLine();
             while (true){
                 String request = in.readLine();
-                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
                 String rqstTime = java.time.LocalTime.now().format(dtf);
 
                 if(request == null) {
