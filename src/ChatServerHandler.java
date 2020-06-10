@@ -4,19 +4,26 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class ChatServerHandler extends Thread{
+
+public class ChatServerHandler extends Thread {
 
     int globalport;
     public static ArrayList<ClientHandler> clients = new ArrayList<>();
-    public static ArrayList<ClientHandler> room1 = new ArrayList<>();
+    public static ArrayList<ArrayList<ClientHandler>> rooms = new ArrayList<>();
+    public static ServerSocket ss;
 
-    public ChatServerHandler (int port) {
+    public ChatServerHandler(int port) {
         globalport = port;
+        this.rooms.add(clients);
         start();
     }
 
+    public static void closeServerSocket() throws IOException {
+        ss.close();
+        System.out.println("Close Server Socket");
+    }
+
 //    public static void printMembers(){
-//
 //        for (ClientHandler c : clients) {
 //            System.out.println(c.toString());
 //        }
@@ -27,18 +34,18 @@ public class ChatServerHandler extends Thread{
 
         try {
             System.out.println("[SERVER] Before...");
-            ServerSocket ss = new ServerSocket(globalport);
+            ss = new ServerSocket(globalport);
             System.out.println("[SERVER] Listening...");
 
-            while(true){
+            while (true) {
 
                 Socket client = ss.accept();
                 System.out.println("[SERVER] Connected to client.");
 
-                PrintWriter out = new PrintWriter(client.getOutputStream(), true);
+                new PrintWriter(client.getOutputStream(), true);
 
                 ClientHandler clientThread = new ClientHandler(client);
-                clients.add(clientThread);
+                rooms.get(0).add(clientThread);
                 clientThread.update();
 
            /*for (ClientHandler c : clients) {
@@ -46,7 +53,7 @@ public class ChatServerHandler extends Thread{
             }*/
             }
         } catch (IOException e) {
-
+            return;
         }
     }
 }

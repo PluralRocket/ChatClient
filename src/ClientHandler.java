@@ -6,13 +6,14 @@ import java.net.Socket;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class ClientHandler extends Thread{
+public class ClientHandler extends Thread {
 
     private Socket client;
     private BufferedReader in;
     private PrintWriter out;
     private String name;
-    private ArrayList<ClientHandler> currentRoom = new ArrayList<>();
+    private int roomIndex = 0;
+    private ArrayList<ClientHandler> currentRoom;
     private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
 
     public ClientHandler(Socket socket) throws IOException {
@@ -23,58 +24,70 @@ public class ClientHandler extends Thread{
         start();
     }
 
-    public void update(){
-        currentRoom = currentRoom = ChatServerHandler.clients;
+    public void update() {
+        currentRoom = ChatServerHandler.rooms.get(0);
     }
 
     @Override
     public void run() {
-        try{
-                name = in.readLine();
-            while (true){
+        try {
+            name = in.readLine();
+            while (true) {
                 String request = in.readLine();
                 String rqstTime = java.time.LocalTime.now().format(dtf);
 
-                if(request == null) {
-                    ChatServerHandler.clients.remove(this);
-                }
-                if(request.equals("who")){
-                    out.println("Chat Server Handler");
-                    for (ClientHandler c : ChatServerHandler.clients) {
-                        out.println(c.name);
-                    }
-                    out.println("CurrentRoom");
+                if (request == null) {
+                    ChatServerHandler.rooms.get(roomIndex).remove(this);
+                } else if (request.equals("who")) {
+                    out.println("Currently in room:");
                     for (ClientHandler c : currentRoom) {
                         out.println(c.name);
                     }
-                }
-                else if(request.startsWith("room")){
+                } else if (request.equals("create room")) {
+                    ArrayList<ClientHandler> newRoom = new ArrayList<>();
+                    ChatServerHandler.rooms.add(newRoom);
+                    for (ArrayList <ClientHandler> c : ChatServerHandler.rooms) {
+                        out.print("[");
+                        for (int i=0; i<c.size();i++){
+                        out.print(" " + c.get(i).name + " ");
+                        }
+                        out.println("]");
+                    }
+                } else if (request.equals("list rooms")) {
 
-                    ChatServerHandler.clients.remove(this);
-                    this.currentRoom = ChatServerHandler.room1;
-                    ChatServerHandler.room1.add(this);
+                        for (int i=0; i<ChatServerHandler.rooms.size();i++){
+                            out.print("[");
+                            out.print("Room " + i);
+                            out.println("]");
+                        }
+                } else if (request.startsWith("room")) {
+                    ChatServerHandler.rooms.get(roomIndex).remove(this);
+                    roomIndex = Integer.parseInt(request.substring(5));
+                    this.currentRoom = ChatServerHandler.rooms.get(roomIndex);
+                    ChatServerHandler.rooms.get(roomIndex).add(this);
+                } else {
+                    for (ClientHandler c : currentRoom) {
+                        c.out.println(this.name + ": " + request + " [" + rqstTime + "]");
+                    }
                 }
-                else{
-                for (ClientHandler c : currentRoom) {
-                    c.out.println(this.name + ": " + request + " [" + rqstTime + "]");
-                }
-            }
             }
         } catch (Exception e) {
-            out.close();
+
+            System.out.println("ClientHandler caught");
+
+        } finally {
             try {
-                client.close();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        }
-        finally {
             out.close();
             try {
                 client.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            System.out.println("finally");
         }
 
     }

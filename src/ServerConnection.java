@@ -6,11 +6,9 @@ import java.net.Socket;
 public class ServerConnection extends Thread {
     Socket server;
     BufferedReader in;
-    private String clientName;
 
     public ServerConnection(Socket socket, String name) throws IOException {
         this.server = socket;
-        this.clientName = name;
         this.in = new BufferedReader(new InputStreamReader(server.getInputStream()));
         start();
     }
@@ -18,18 +16,20 @@ public class ServerConnection extends Thread {
     @Override
     public void run() {
         try {
-            String serverResponse=null;
+            String serverResponse;
             while(true){
             serverResponse = in.readLine();
+            if(serverResponse == null) break;
             System.out.println(serverResponse);
             }
         } catch (Exception e) {
-            System.out.println("Caught");
-        } finally {
-            try {
+            try{
                 in.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+                server.close();
+                System.out.println("in closed");
+                System.out.println("server closed");
+            } catch (IOException ex){
+                System.out.println("caught in server ex");
             }
         }
     }

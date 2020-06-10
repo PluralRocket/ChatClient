@@ -47,8 +47,8 @@ public class Client {
 
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
-        new ServerConnection(socket, getName());
-        System.out.println("Created ServerConnection.");
+        ServerConnection sc = new ServerConnection(socket, getName());
+//        System.out.println("Created ServerConnection.");
 
         System.out.print("Enter your name: ");
         setName(keyboard.readLine());
@@ -56,13 +56,23 @@ public class Client {
 
         while (true) {
             request = keyboard.readLine();
-            if (request.equals("quit")) break;
-            out.println(request);
+            if (request.equals("quit")) {
+                break;
+
+            } else if (request.equals("shutdown")) {
+                try {
+                    ChatServerHandler.closeServerSocket();
+                } catch (Exception e) {
+                    System.out.println("Not server creator.");
+                }
+            } else {
+                out.println(request);
+            }
         }
         out.close();
         socket.close();
-        //System.exit(0);
+
+//       System.exit(0);
     }
 
 }
-
