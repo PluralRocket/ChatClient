@@ -61,7 +61,10 @@ public class Client {
 
             } else if (request.equals("shutdown")) {
                 try {
+                    out.close();
+                    socket.close();
                     ChatServerHandler.closeServerSocket();
+                    System.exit(0);
                 } catch (Exception e) {
                     System.out.println("Not server creator.");
                 }
@@ -69,6 +72,7 @@ public class Client {
                 out.println(request);
             }
         }
+
         out.close();
         socket.close();
 

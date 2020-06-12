@@ -14,7 +14,7 @@ public class ClientHandler extends Thread {
     private String name;
     private int roomIndex = 0;
     private ArrayList<ClientHandler> currentRoom;
-    private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
+    private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("HH:mm");
 
     public ClientHandler(Socket socket) throws IOException {
         this.client = socket;
@@ -34,7 +34,7 @@ public class ClientHandler extends Thread {
             name = in.readLine();
             while (true) {
                 String request = in.readLine();
-                String rqstTime = java.time.LocalTime.now().format(dtf);
+                String rqstTime = java.time.LocalTime.now().format(DTF);
 
                 if (request == null) {
                     ChatServerHandler.rooms.get(roomIndex).remove(this);
@@ -53,18 +53,25 @@ public class ClientHandler extends Thread {
                         }
                         out.println("]");
                     }
-                } else if (request.equals("list rooms")) {
+                } else if (request.equals("rooms")) {
 
                         for (int i=0; i<ChatServerHandler.rooms.size();i++){
                             out.print("[");
                             out.print("Room " + i);
                             out.println("]");
                         }
-                } else if (request.startsWith("room")) {
-                    ChatServerHandler.rooms.get(roomIndex).remove(this);
-                    roomIndex = Integer.parseInt(request.substring(5));
-                    this.currentRoom = ChatServerHandler.rooms.get(roomIndex);
-                    ChatServerHandler.rooms.get(roomIndex).add(this);
+                } else if (request.startsWith("room ")) {
+                    int newRoomIndex = Integer.parseInt(request.substring(5));
+                    if(newRoomIndex<10) {
+                        if(ChatServerHandler.rooms.size()>newRoomIndex) {
+                            ChatServerHandler.rooms.get(roomIndex).remove(this);
+                            roomIndex = newRoomIndex;
+                            this.currentRoom = ChatServerHandler.rooms.get(newRoomIndex);
+                            ChatServerHandler.rooms.get(newRoomIndex).add(this);
+                        }
+                    } else {
+                            out.println("Room does not exist");
+                        }
                 } else {
                     for (ClientHandler c : currentRoom) {
                         c.out.println(this.name + ": " + request + " [" + rqstTime + "]");
@@ -77,6 +84,7 @@ public class ClientHandler extends Thread {
 
         } finally {
             try {
+                currentRoom.remove(this);
                 in.close();
             } catch (IOException e) {
                 e.printStackTrace();
