@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.*;
 
 public class SimpleIO {
 
@@ -51,15 +52,84 @@ public class SimpleIO {
         System.out.println(letter);
         br.close();*/
 
-        try(OutputStreamWriter osw = new OutputStreamWriter(System.out)){   //try-with-resources
-            osw.write("String");
-            osw.append(" append");
-            osw.write(97);
-            osw.write('a');
+//        try(OutputStreamWriter osw = new OutputStreamWriter(System.out)){   //try-with-resources
+//            osw.write("String");
+//            osw.append(" append");
+//            osw.append(" NEWAPPEND");
+//            osw.write(97);
+//            osw.write('a');
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
-        } catch (IOException e) {
-            e.printStackTrace();
+//        String s = "abcde";
+//        int i = s.charAt(0);
+//        System.out.println(i);
+
+//        List<String> ll = new LinkedList<String>();
+//        ll.add("one");
+//        ll.add("two");
+//        ll.add("three");
+//        ll.add("abc");
+//
+//        List<Integer> intList = new LinkedList<Integer>();
+//        intList.add(7);
+//        intList.add(2);
+//        intList.add(5);
+//        intList.add(4);
+//
+////        System.out.println(ll.contains("one"));
+////        ll.sort(Comparator.reverseOrder());
+////        intList.sort(Comparator.naturalOrder());
+//////        Iterator iterator = ll.listIterator();
+////        Iterator intIterator = intList.listIterator();
+//////        while (iterator.hasNext()){
+//////            System.out.println(iterator.next());
+//////        }
+////        while (intIterator.hasNext()){
+////            System.out.println(intIterator.next());
+////        }
+//
+//        TreeSet<Integer> tree = new TreeSet<>();
+//        tree.add(1);
+//        tree.add(2);
+//        tree.add(3);
+//        tree.add(4);
+//        tree.add(5);
+
+        Integer[] array = new Integer[5];
+
+        for (int i = 0; i<5;i++){
+            array[i] = i+1;
         }
+
+        int position = 0;
+
+        for (Integer i : array) {
+            System.out.println(array[position++]); // <- post-increment operator, starts at 0 not 1!
+        }
+
+//
+//        Iterator treeIterator = tree.iterator();
+//
+//        while (treeIterator.hasNext()){
+//            System.out.println(treeIterator.next());
+//        }
+//
+//        System.out.println(tree.size());
+//        System.out.println(tree.first());
+//        System.out.println(tree.higher(3));
+//        System.out.println(tree.lower(3));
+//        tree.clear();
+//        System.out.println(tree.size());
+
+
+//        int x = 11;
+//        int y = 9;
+//
+//        System.out.println(x&y);
+//        System.out.println(x==0 && y==0);
 
     }
 

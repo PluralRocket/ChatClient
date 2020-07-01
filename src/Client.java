@@ -43,7 +43,7 @@ public class Client {
 
 //        ChatServer.createSocket(port);
 
-        Socket socket = new Socket(IP_ADDRESS, port);
+        Socket socket = new SocketBuilder(port).withIP(IP_ADDRESS).build();
 
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
