@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class ChatServerHandler extends Thread {
 
-    int globalport;
+    private int globalport;
     public static ArrayList<ClientHandler> clients = new ArrayList<>();
     public static ArrayList<ArrayList<ClientHandler>> rooms = new ArrayList<>();
     public static ServerSocket ss;
@@ -17,17 +17,6 @@ public class ChatServerHandler extends Thread {
         this.rooms.add(clients);
         start();
     }
-
-    public static void closeServerSocket() throws IOException {
-        ss.close();
-        System.out.println("Close Server Socket");
-    }
-
-//    public static void printMembers(){
-//        for (ClientHandler c : clients) {
-//            System.out.println(c.toString());
-//        }
-//    }
 
     @Override
     public void run() {
@@ -48,9 +37,6 @@ public class ChatServerHandler extends Thread {
                 rooms.get(0).add(clientThread);
                 clientThread.update();
 
-           /*for (ClientHandler c : clients) {
-                System.out.println(c.toString());
-            }*/
             }
         } catch (IOException e) {
             return;

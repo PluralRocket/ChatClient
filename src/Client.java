@@ -7,7 +7,6 @@ import java.net.Socket;
 public class Client {
 
     private static final String IP_ADDRESS = "127.0.0.1";
-    //    private static final int PORT = 9090;
     private static String name;
     private static int port;
 
@@ -33,22 +32,16 @@ public class Client {
         BufferedReader keyboard = new BufferedReader(new InputStreamReader(System.in));
         String request;
 
-//        out.println(getName());
-
         System.out.print("Enter port: ");
         setPort(Integer.parseInt(keyboard.readLine()));
-//        out.println(port);
 
         new ChatServerHandler(port);
-
-//        ChatServer.createSocket(port);
 
         Socket socket = new SocketBuilder(port).withIP(IP_ADDRESS).build();
 
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
-        ServerConnection sc = new ServerConnection(socket, getName());
-//        System.out.println("Created ServerConnection.");
+        ServerConnection sc = new ServerConnection(socket);
 
         System.out.print("Enter your name: ");
         setName(keyboard.readLine());
@@ -58,17 +51,8 @@ public class Client {
             request = keyboard.readLine();
             if (request.equals("quit")) {
                 break;
-
-            } else if (request.equals("shutdown")) {
-                try {
-                    out.close();
-                    socket.close();
-                    ChatServerHandler.closeServerSocket();
-                    System.exit(0);
-                } catch (Exception e) {
-                    System.out.println("Not server creator.");
-                }
-            } else {
+            }
+            else {
                 out.println(request);
             }
         }

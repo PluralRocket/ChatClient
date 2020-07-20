@@ -9,12 +9,13 @@ import java.util.ArrayList;
 public class ClientHandler extends Thread {
 
     private Socket client;
-    private BufferedReader in;
-    private PrintWriter out;
-    private String name;
-    private int roomIndex = 0;
-    private ArrayList<ClientHandler> currentRoom;
+    protected BufferedReader in;
+    protected PrintWriter out;
+    protected String name;
+    protected int roomIndex = 0;
+    protected ArrayList<ClientHandler> currentRoom;
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("HH:mm");
+    protected String rqstTime;
 
     public ClientHandler(Socket socket) throws IOException {
         this.client = socket;
@@ -34,53 +35,17 @@ public class ClientHandler extends Thread {
             name = in.readLine();
             while (true) {
                 String request = in.readLine();
-                String rqstTime = java.time.LocalTime.now().format(DTF);
+                this.rqstTime = java.time.LocalTime.now().format(DTF);
 
                 if (request == null) {
                     ChatServerHandler.rooms.get(roomIndex).remove(this);
-                } else if (request.equals("who")) {
-                    out.println("Currently in room:");
-                    for (ClientHandler c : currentRoom) {
-                        out.println(c.name);
-                    }
-                } else if (request.equals("create room")) {
-                    ArrayList<ClientHandler> newRoom = new ArrayList<>();
-                    ChatServerHandler.rooms.add(newRoom);
-                    for (ArrayList <ClientHandler> c : ChatServerHandler.rooms) {
-                        out.print("[");
-                        for (int i=0; i<c.size();i++){
-                        out.print(" " + c.get(i).name + " ");
-                        }
-                        out.println("]");
-                    }
-                } else if (request.equals("rooms")) {
-
-                        for (int i=0; i<ChatServerHandler.rooms.size();i++){
-                            out.print("[");
-                            out.print("Room " + i);
-                            out.println("]");
-                        }
-                } else if (request.startsWith("room ")) {
-                    int newRoomIndex = Integer.parseInt(request.substring(5));
-                    if(newRoomIndex<10) {
-                        if(ChatServerHandler.rooms.size()>newRoomIndex) {
-                            ChatServerHandler.rooms.get(roomIndex).remove(this);
-                            roomIndex = newRoomIndex;
-                            this.currentRoom = ChatServerHandler.rooms.get(newRoomIndex);
-                            ChatServerHandler.rooms.get(newRoomIndex).add(this);
-                        }
-                    } else {
-                            out.println("Room does not exist");
-                        }
-                } else {
-                    for (ClientHandler c : currentRoom) {
-                        c.out.println(this.name + ": " + request + " [" + rqstTime + "]");
-                    }
                 }
+
+                out.println(new CommandHandler().executeCommand(this, request));
             }
         } catch (Exception e) {
 
-            System.out.println("ClientHandler caught");
+            e.printStackTrace();
 
         } finally {
             try {

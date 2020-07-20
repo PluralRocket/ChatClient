@@ -6,12 +6,11 @@ public class SocketBuilder {
     private String IP_Address;
     private int Port_Number;
 
-    public SocketBuilder (int port){
+    public SocketBuilder(int port) {
         this.Port_Number = port;
-
     }
 
-    public SocketBuilder withIP (String ip){
+    public SocketBuilder withIP(String ip) {
         this.IP_Address = ip;
         return this;
     }
