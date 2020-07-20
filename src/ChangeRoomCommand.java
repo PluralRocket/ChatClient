@@ -7,6 +7,7 @@ public class ChangeRoomCommand implements ClientCommand {
         this.ch = ch;
     }
 
+    //test
     @Override
     public String execute() {
         ch.out.println("Select room to move to: ");
