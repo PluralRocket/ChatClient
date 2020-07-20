@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class ChatServerHandler extends Thread {
 
-    private int globalport;
+    private final int globalport;
     public static ArrayList<ClientHandler> clients = new ArrayList<>();
     public static ArrayList<ArrayList<ClientHandler>> rooms = new ArrayList<>();
     public static ServerSocket ss;

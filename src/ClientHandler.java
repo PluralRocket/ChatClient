@@ -12,7 +12,7 @@ public class ClientHandler extends Thread {
     protected BufferedReader in;
     protected PrintWriter out;
     protected String name;
-    protected int roomIndex = 0;
+    int roomIndex = 0;
     protected ArrayList<ClientHandler> currentRoom;
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("HH:mm");
     protected String rqstTime;
@@ -41,7 +41,7 @@ public class ClientHandler extends Thread {
                     ChatServerHandler.rooms.get(roomIndex).remove(this);
                 }
 
-                out.println(new CommandHandler().executeCommand(this, request));
+                out.println(CommandHandler.executeCommand(this, request));
             }
         } catch (Exception e) {
 

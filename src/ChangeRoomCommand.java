@@ -10,7 +10,7 @@ public class ChangeRoomCommand implements ClientCommand {
     @Override
     public String execute() {
         ch.out.println("Select room to move to: ");
-        ch.out.println(new CommandHandler().doCommand(new ListRoomsCommand()));
+        ch.out.println(CommandHandler.executeCommand(ch, Constants.ROOMS));
         try {
             this.roomNum = Integer.parseInt(ch.in.readLine())-1;
         } catch (Exception e){

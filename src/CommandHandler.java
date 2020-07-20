@@ -1,29 +1,32 @@
-public class CommandHandler {
+public abstract class CommandHandler {
 
-    private ClientCommand c;
+    public static String executeCommand(ClientHandler ch, String request){
 
-    public String executeCommand(ClientHandler ch, String request){
-        if (request.equals("who")) {
-            this.c = new WhoCommand();
-            return c.execute();
-        } else if (request.equals("create room")) {
-            this.c = new CreateRoomCommand();
-            return c.execute();
-        } else if (request.equals("rooms")) {
-            this.c = new ListRoomsCommand();
-            return c.execute();
-        } else if (request.equals("change room")) {
-            this.c = new ChangeRoomCommand(ch);
-            return c.execute();
-        } else {
-            for (ClientHandler c : ch.currentRoom) {
-                c.out.println(ch.name + ": " + request + " [" + ch.rqstTime + "]");
-            }
-            return "";
+        ClientCommand c;
+
+        switch (request) {
+            case "who":
+                c = new WhoCommand();
+                break;
+            case "create room":
+                c = new CreateRoomCommand();
+                break;
+            case "rooms":
+                c = new ListRoomsCommand();
+                break;
+            case "change room":
+                c = new ChangeRoomCommand(ch);
+                break;
+            default:
+                for (ClientHandler clientHandler : ch.currentRoom) {
+                    clientHandler.out.println(ch.name + ": " + request + " [" + ch.rqstTime + "]");
+                }
+                return "";
         }
+        return c.execute();
     }
 
-    public String doCommand(ClientCommand c){
+    public static String doCommand(ClientCommand c){
         return c.execute();
     }
 }

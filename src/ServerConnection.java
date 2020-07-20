@@ -20,8 +20,8 @@ public class ServerConnection extends Thread {
             while (true) {
                 serverResponse = in.readLine();
                 if (serverResponse == null) break;
-                else if (serverResponse.equals("")) { }
-                else System.out.println(serverResponse);
+
+                if (!serverResponse.equals("")) System.out.println(serverResponse);
             }
         } catch (Exception e) {
             try {
